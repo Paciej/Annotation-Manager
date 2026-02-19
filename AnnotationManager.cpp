@@ -6,23 +6,26 @@ void AnnotationManager::setSingleParamFromUser(T& param, const char* name, bool 
     bool newParamSet = false;
 
     while (!newParamSet) {
-        std::cout << "set " << name << ": " << std::endl;
-        T newParam;
-        std::cin >> newParam;
+        std::cout << "Podaj wartosc dla " << name << ": " << std::endl;
+        std::string newParam;
+        std::getline(std::cin, newParam);
 
         if (askIfGood) {
-            std::cout << "Czy " << name << " ma byc " << newParam << "? [T/n]: ";
-            char answer;
-            std::cin >> answer;
-            
-            switch (answer) {
-                case 'T':
-                case 't': param = newParam; newParamSet = true; break;
-                case 'N':
-                case 'n': std::cout << std::endl << "Podaj nowa wartosc" << std::endl; break;
-                default:      std::cout << std::endl << "" << std::endl;
+            bool answerGood = false;
+            while (!answerGood) {
+                std::cout << "Czy " << name << " ma byc " << newParam << "? [T/n]: ";
+                char answer;
+                std::cin >> answer;
+                std::cin.get();
+                
+                switch (answer) {
+                    case 'T':
+                    case 't': param = newParam; newParamSet = true; answerGood = true; break;
+                    case 'N':
+                    case 'n': std::cout << std::endl << "Odrzucono podana wartosc" << std::endl; answerGood = true; break;
+                    default: std::cout << std::endl << "Podaj wartosc jeszcze raz" << std::endl; 
+                }
             }
-
         } else {
             param = newParam;
             newParamSet = true;        
@@ -61,8 +64,7 @@ void AnnotationManager::getParametersFromUser()
 
     while (!paramGood) {
         std::cout << "podaj styl adnotacji (sl dla wyswietlenia listy): ";
-        std::cin >> newParam;
-
+        std::getline(std::cin, newParam);
         //std::cin.clear();
         //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 

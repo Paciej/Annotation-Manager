@@ -33,7 +33,7 @@ private:
     std::string author;
     std::string title;
     std::string pages;
-    int year;
+    std::string year;
 
     template <typename T>
     void setSingleParamFromUser(T& param, const char* name, bool askIfGood);
@@ -47,7 +47,7 @@ public:
         author = "";
         title = "";
         pages = "";
-        year = 0;
+        year = "";
     }
 
     AnnotationManager(int numOfArguments, char *arguments[]); 
