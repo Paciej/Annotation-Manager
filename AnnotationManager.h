@@ -1,30 +1,4 @@
-#include <iostream>
-#include <string>
-
-enum class AnnotationStyle {
-    None,
-    Harvard,
-    APA,
-    BAS
-};
-
-enum class AnnotationCategory {
-   None,
-   Book,
-   WebsiteArticle,
-   OnlineVideo,
-   ScienceArticle 
-};
-
-
-struct AnnotationVariables {
-    int year;
-    AnnotationStyle annotationStyle;
-    AnnotationCategory annotationCategory;
-    std::string author;
-    std::string title;
-    std::string pages = nullptr;
-};
+#include "Parameters.h"
 
 class AnnotationManager {
 private:
@@ -37,8 +11,6 @@ private:
 
     template <typename T>
     void setSingleParamFromUser(T& param, const char* name, bool askIfGood);
-    const char* categoryToString(AnnotationCategory category);
-    const char* styleToString(AnnotationStyle style);
     void parseRawInformation(int argCount, char *args[]);
 public:
     AnnotationManager() {

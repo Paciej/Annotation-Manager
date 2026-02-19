@@ -1,4 +1,5 @@
 #include "AnnotationManager.h"
+#include <iostream>
 #include <limits>
 
 template <typename T>
@@ -30,25 +31,6 @@ void AnnotationManager::setSingleParamFromUser(T& param, const char* name, bool 
             param = newParam;
             newParamSet = true;        
         }
-    }
-}
-
-const char* AnnotationManager::styleToString(AnnotationStyle style) {
-    switch (style) {
-        case AnnotationStyle::BAS: return "BAS";
-        case AnnotationStyle::APA: return "APA";
-        case AnnotationStyle::Harvard: return "Harvard";
-        default: return "None";
-    }
-}
-
-const char* AnnotationManager::categoryToString(AnnotationCategory category) {
-    switch (category) {
-        case AnnotationCategory::Book: return "Book";
-        case AnnotationCategory::ScienceArticle:  return "Science Article";
-        case AnnotationCategory::WebsiteArticle : return "Website Article";
-        case AnnotationCategory::OnlineVideo : return "Online video";
-        default: return "None";
     }
 }
 
