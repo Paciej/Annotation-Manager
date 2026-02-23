@@ -7,22 +7,22 @@ const char *BasGenerator::generateAnnotation(const AnnotationData& annData)
     switch(annData.annCat) {
         case AnnotationCategory::Book : 
         case AnnotationCategory::Monograph :
-        annotation = annData.author + ", " + annData.title + ", " + annData.publisher + annData.place + ", "  + " " + std::to_string(annData.year) + ", s. " + annData.pages + ".";
+        annotation = annData.author + ", " + annData.title + ", " + annData.publisher + ", " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";
         break;
         case AnnotationCategory::Collective :
-        annotation = annData.author + ", TYTUL ROZDZIALU, [w:" + annData.title + "], red. IMIE REDAKTORA, " + annData.place + " " + std::to_string(annData.year) + ", s. " + annData.pages + ".";  
+        annotation = annData.author + ", TYTUL ROZDZIALU, [w:" + annData.title + "], red. IMIE REDAKTORA, " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";  
         break;
         case AnnotationCategory::LegalAct :
-        annotation = "Ustawa z dnia " + std::to_string(annData.year) + " r. - " + annData.title + ", Dz.U. poz. " + annData.pages + "."; 
+        annotation = "Ustawa z dnia " + (annData.year) + " r. - " + annData.title + ", Dz.U. poz. " + annData.pages + "."; 
         break;
         case AnnotationCategory::MagazineArticle :
-        annotation = annData.author + ", " + annData.title + ", ,," + annData.publisher + "\" " + std::to_string(annData.year) + ", s. " + annData.pages + ".";
+        annotation = annData.author + ", " + annData.title + ", ,," + annData.publisher + "\" " + (annData.year) + ", s. " + annData.pages + ".";
         break;  
         case AnnotationCategory::OnlineArticle :
-        annotation = annData.author + ", " + annData.title + ", " + annData.url + "[dostęp: " + std::to_string(annData.year) + "]";
+        annotation = annData.author + ", " + annData.title + ", " + annData.url + "[dostęp: " + (annData.year) + "]";
         break;
         case AnnotationCategory::OnlineVideo :
-        annotation = annData.author + ", " + annData.title + ", [online: " + annData.publisher + " " + std::to_string(annData.year) + "]";
+        annotation = annData.author + ", " + annData.title + ", [online: " + annData.publisher + " " + (annData.year) + "]";
         break; 
     }
     

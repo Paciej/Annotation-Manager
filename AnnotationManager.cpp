@@ -33,24 +33,16 @@ void AnnotationManager::setSingleParamFromUser(T& param, const char* name, bool 
     }
 }
 
-AnnotationManager::AnnotationManager(int numOfArguments, char *arguments[]) {
-    parseRawInformation(numOfArguments, arguments);    
+AnnotationManager::AnnotationManager(){}
+
+AnnotationManager::AnnotationManager(int numOfArguments, char *arguments[])
+{
+    parseRawInformation(numOfArguments, arguments);
 }
 
 AnnotationData AnnotationManager::getAnnotationVariablesStruct()
 {
-    AnnotationData newData;
-    newData.annCat = this->annCat;
-    newData.annStyle = this->annStyle;
-    newData.author = this->author;
-    newData.pages = this->pages;
-    newData.place = "";
-    newData.publisher = "";
-    newData.source = "";
-    newData.title = this->title;
-    newData.url = "";
-    newData.year = stoi(this->year);
-    return newData;
+    return this->annData;
 }
 
 void AnnotationManager::getParametersFromUser()
@@ -60,12 +52,10 @@ void AnnotationManager::getParametersFromUser()
     std::string newParam;
 
     while (!paramGood) {
-        std::cout << "podaj styl adnotacji (sl dla wyswietlenia listy): ";
+        std::cout << "podaj styl adnotacji (ls dla wyswietlenia listy): ";
         std::getline(std::cin, newParam);
-        //std::cin.clear();
-        //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if (newParam == "sl") {
+        if (newParam == "ls") {
             // WYSWIETL LISTE DOSTEPNYCH STYLI
             std::cout << std::endl << "Lista styli" << std::endl;
             for (auto style : styleMap) {
@@ -75,14 +65,14 @@ void AnnotationManager::getParametersFromUser()
         } else {
             for (auto style : styleMap) {
                 if (newParam == style.first) {
-                    this->annStyle = style.second;
+                    this->annData.annStyle = style.second;
                     std::cout << "Poprawnie wybrano styl" << std::endl;
                     paramGood = true;
                     break;
                 }
             }
 
-            if (this->annStyle == AnnotationStyle::None) {
+            if (this->annData.annStyle == AnnotationStyle::None) {
                 std::cout << "Niestety, taki styl nie jest oblugiwany lub nie istnieje. Pamietaj, ze styl jest case sensitive" << std::endl;
             }
             continue;
@@ -104,34 +94,36 @@ void AnnotationManager::getParametersFromUser()
         } else {
             for (auto category : catMap) {
                 if (newParam == category.first) {
-                    this->annCat = category.second;
+                    this->annData.annCat = category.second;
                     std::cout << "Poprawnie wybrano kategorie" << std::endl;
                     paramGood = true;
                     break;
                 }
             }
 
-            if (this->annCat == AnnotationCategory::None) {
+            if (this->annData.annCat == AnnotationCategory::None) {
                 std::cout << "Niestety, taka kategoria: " << newParam <<  " nie jest oblugiwana lub nie istnieje. Pamietaj, ze kategoria jest case sensitive" << std::endl;
             }
         }
     }
-    setSingleParamFromUser(this->author, "Autor", 1);
-    setSingleParamFromUser(this->title, "tytul", 1);
-    setSingleParamFromUser(this->year, "rok", 0);
-    setSingleParamFromUser(this->pages, "strony", 0);
-    
+    setSingleParamFromUser(this->annData.author, "Autor", 0);
+    setSingleParamFromUser(this->annData.title, "tytul", 0);
+    setSingleParamFromUser(this->annData.year, "rok", 0);
+    setSingleParamFromUser(this->annData.pages, "strony", 0);
+    setSingleParamFromUser(this->annData.place, "Miejsce", 0);    
+    setSingleParamFromUser(this->annData.publisher, "Wydawca", 0);    
+    setSingleParamFromUser(this->annData.url, "Url", 0);    
 }
 
 void AnnotationManager::listParameters()
 {
     std::cout << std::endl << "Wprowadzone dane: " << std::endl;
-    std::cout << "Styl: " << styleToString(this->annStyle) << std::endl;
-    std::cout << "Kategoria: " << categoryToString(this->annCat) << std::endl;
-    std::cout << "Autor: " << this->author << std::endl;
-    std::cout << "Dzielo: " << this->title << std::endl;
-    std::cout << "Rok: " << this->year << std::endl;
-    std::cout << "Strony: " << this->pages << std::endl;
+    std::cout << "Styl: " << styleToString(this->annData.annStyle) << std::endl;
+    std::cout << "Kategoria: " << categoryToString(this->annData.annCat) << std::endl;
+    std::cout << "Autor: " << this->annData.author << std::endl;
+    std::cout << "Dzielo: " << this->annData.title << std::endl;
+    std::cout << "Rok: " << this->annData.year << std::endl;
+    std::cout << "Strony: " << this->annData.pages << std::endl;
 }
 
 void AnnotationManager::parseRawInformation(int argCount, char *args[]) {

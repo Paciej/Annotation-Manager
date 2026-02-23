@@ -4,26 +4,13 @@
 
 class AnnotationManager {
 private:
-    AnnotationStyle annStyle;    
-    AnnotationCategory annCat;
-    std::string author;
-    std::string title;
-    std::string pages;
-    std::string year;
+    AnnotationData annData;
 
     template <typename T>
     void setSingleParamFromUser(T& param, const char* name, bool askIfGood);
     void parseRawInformation(int argCount, char *args[]);
 public:
-    AnnotationManager() {
-        annStyle = AnnotationStyle::None;
-        annCat = AnnotationCategory::None;
-        author = "";
-        title = "";
-        pages = "";
-        year = "";
-    }
-
+    AnnotationManager();
     AnnotationManager(int numOfArguments, char *arguments[]); 
 
     AnnotationData getAnnotationVariablesStruct(); 

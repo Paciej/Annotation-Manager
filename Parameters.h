@@ -22,9 +22,9 @@ enum class AnnotationCategory {
 };
 
 struct AnnotationData {
-    int year = 0;
     AnnotationStyle annStyle = AnnotationStyle::None;
     AnnotationCategory annCat = AnnotationCategory::None;
+    std::string year = "0";
     std::string author = "_author_";
     std::string title = "_title_";
     std::string place = "_place_";
