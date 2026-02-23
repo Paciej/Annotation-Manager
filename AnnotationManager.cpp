@@ -1,6 +1,5 @@
 #include "AnnotationManager.h"
 #include <iostream>
-#include <limits>
 
 template <typename T>
 void AnnotationManager::setSingleParamFromUser(T& param, const char* name, bool askIfGood) {
@@ -52,60 +51,53 @@ void AnnotationManager::getParametersFromUser()
 
         if (newParam == "sl") {
             // WYSWIETL LISTE DOSTEPNYCH STYLI
-            std::cout << std::endl << "Lista stylow: " << std::endl;
-            std::cout << "BAS" << std::endl;
-            std::cout << "APA" << std::endl;
-            std::cout << "Harvard" << std::endl;
+            std::cout << std::endl << "Lista styli" << std::endl;
+            for (auto style : styleMap) {
+                std::cout << style.first << std::endl;
+            }
             continue;
-        } else if (newParam == "BAS") {
-            annStyle = AnnotationStyle::BAS;
-            std::cout << "Poprawnie wybrano styl" << std::endl;
-            break;
-        } else if (newParam == "APA") {
-            annStyle = AnnotationStyle::APA;
-            std::cout << "Poprawnie wybrano styl" << std::endl;
-            break;
-        } else if (newParam == "Harvard") {
-            annStyle = AnnotationStyle::Harvard;
-            std::cout << "Poprawnie wybrano styl" << std::endl;
-            break;
         } else {
-            std::cout << "Niestety, taki styl nie jest oblugiwany lub nie istnieje. Pamietaj, ze styl jest case sensitive" << std::endl;
+            for (auto style : styleMap) {
+                if (newParam == style.first) {
+                    this->annStyle = style.second;
+                    std::cout << "Poprawnie wybrano styl" << std::endl;
+                    paramGood = true;
+                    break;
+                }
+            }
+
+            if (this->annStyle == AnnotationStyle::None) {
+                std::cout << "Niestety, taki styl nie jest oblugiwany lub nie istnieje. Pamietaj, ze styl jest case sensitive" << std::endl;
+            }
             continue;
         }
     }
 
+    paramGood = false;
     while (!paramGood) {
         std::cout << "podaj kategorie adnotacji (cl dla wyswietlenia listy): ";
         std::getline(std::cin, newParam);
 
         if (newParam == "cl") {
             // WYSWIETL LISTE DOSTEPNYCH KATEGORII
-            std::cout << std::endl << "Lista kategorii: " << std::endl;
-            std::cout << "Book" << std::endl;
-            std::cout << "Website article" << std::endl;
-            std::cout << "Science article" << std::endl;
-            std::cout << "Online video" << std::endl;
-            continue;
-        } else if (newParam == "Book") {
-            annCat = AnnotationCategory::Book;
-            std::cout << "Poprawnie wybrano kategorie" << std::endl;
-            break;
-        } else if (newParam == "Website article") {
-            annCat = AnnotationCategory::WebsiteArticle;
-            std::cout << "Poprawnie wybrano kategorie" << std::endl;
-            break;
-        } else if (newParam == "Science article") {
-            annCat = AnnotationCategory::ScienceArticle;
-            std::cout << "Poprawnie wybrano kategorie" << std::endl;
-            break;
-        }  else if (newParam == "Online video") {
-            annCat = AnnotationCategory::OnlineVideo;
-            std::cout << "Poprawnie wybrano kategorie" << std::endl;
-            break;
+            std::cout << std::endl << "Lista kategorii" << std::endl;
+            for (auto category : catMap) {
+                std::cout << category.first << std::endl;
+            }
+
         } else {
-            std::cout << "Niestety, taka kategoria: " << newParam <<  " nie jest oblugiwana lub nie istnieje. Pamietaj, ze kategoria jest case sensitive" << std::endl;
-            continue;
+            for (auto category : catMap) {
+                if (newParam == category.first) {
+                    this->annCat = category.second;
+                    std::cout << "Poprawnie wybrano kategorie" << std::endl;
+                    paramGood = true;
+                    break;
+                }
+            }
+
+            if (this->annCat == AnnotationCategory::None) {
+                std::cout << "Niestety, taka kategoria: " << newParam <<  " nie jest oblugiwana lub nie istnieje. Pamietaj, ze kategoria jest case sensitive" << std::endl;
+            }
         }
     }
     setSingleParamFromUser(this->author, "Autor", 1);
