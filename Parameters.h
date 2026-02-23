@@ -1,3 +1,5 @@
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
 #include <string>
 #include <unordered_map>
 
@@ -20,34 +22,36 @@ enum class AnnotationCategory {
 };
 
 struct AnnotationData {
-    int year;
+    int year = 0;
     AnnotationStyle annStyle = AnnotationStyle::None;
     AnnotationCategory annCat = AnnotationCategory::None;
-    std::string author = "";
-    std::string title = "";
-    std::string place = "";
-    std::string publisher = "";
-    std::string url = "";
-    std::string source = "";
-    std::string pages = ""; 
+    std::string author = "_author_";
+    std::string title = "_title_";
+    std::string place = "_place_";
+    std::string publisher = "_publisher_";
+    std::string url = "_url_";
+    std::string source = "_source_";
+    std::string pages = "_pages_"; 
 };
 
 const char* styleToString(AnnotationStyle style);
-
 const char* categoryToString(AnnotationCategory category);
 
-static std::unordered_map<const char*, AnnotationCategory> const catMap = { {"None", AnnotationCategory::None}, 
-                                                                            {"Book", AnnotationCategory::Book}, 
-                                                                            {"Collective Work", AnnotationCategory::Collective},
-                                                                            {"Monograph", AnnotationCategory::Monograph},
-                                                                            {"Legal act", AnnotationCategory::LegalAct},
-                                                                            {"Magazine article", AnnotationCategory::MagazineArticle},
-                                                                            {"Online article", AnnotationCategory::OnlineArticle},
-                                                                            {"Online video", AnnotationCategory::OnlineVideo}
-                                                                          };
+static std::unordered_map<const char*, AnnotationCategory> const catMap = { 
+    {"None", AnnotationCategory::None}, 
+    {"Book", AnnotationCategory::Book}, 
+    {"Collective Work", AnnotationCategory::Collective},
+    {"Monograph", AnnotationCategory::Monograph},                                                                           
+    {"Legal act", AnnotationCategory::LegalAct},
+    {"Magazine article", AnnotationCategory::MagazineArticle},
+    {"Online article", AnnotationCategory::OnlineArticle},
+    {"Online video", AnnotationCategory::OnlineVideo}
+};
 
-static std::unordered_map<const char*, AnnotationStyle> const styleMap = {  {"None", AnnotationStyle::None},
-                                                                            {"Harvard", AnnotationStyle::Harvard},
-                                                                            {"APA", AnnotationStyle::APA},
-                                                                            {"BAS", AnnotationStyle::BAS}
-                                                                         };
+static std::unordered_map<const char*, AnnotationStyle> const styleMap = {  
+    {"None", AnnotationStyle::None},
+    {"Harvard", AnnotationStyle::Harvard},
+    {"APA", AnnotationStyle::APA},
+    {"BAS", AnnotationStyle::BAS}
+};
+#endif

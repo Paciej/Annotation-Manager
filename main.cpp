@@ -1,6 +1,7 @@
 #include <iostream>
-#include <string>
 #include "AnnotationManager.h"
+#include "AnnotationGenerator.h"
+#include "BasGenerator.h"
 
 int main(int argc, char *argv[]) {
 
@@ -17,4 +18,9 @@ int main(int argc, char *argv[]) {
         manager.listParameters();
     }
 
+    AnnotationData newData = manager.getAnnotationVariablesStruct();
+    AnnotationGenerator *generator = new BasGenerator();
+    const char *annotation = generator->generateAnnotation(newData);
+
+    std::cout << "Przypis: " << annotation << std::endl;
 }

@@ -1,3 +1,5 @@
+#ifndef ANNOTATION_MANAGER_H
+#define ANNOTATION_MANAGER_H
 #include "Parameters.h"
 
 class AnnotationManager {
@@ -24,11 +26,12 @@ public:
 
     AnnotationManager(int numOfArguments, char *arguments[]); 
 
-    AnnotationVariables getAnnotationVariablesStruct(); 
+    AnnotationData getAnnotationVariablesStruct(); 
 
-    AnnotationVariables getAnnotationVariablesStruct(int argCount, char *args[]);
+    AnnotationData getAnnotationVariablesStruct(int argCount, char *args[]);
 
     void getParametersFromUser();
 
     void listParameters();
 };
+#endif

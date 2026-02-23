@@ -12,9 +12,11 @@ const char* styleToString(AnnotationStyle style) {
 const char* categoryToString(AnnotationCategory category) {
     switch (category) {
         case AnnotationCategory::Book: return "Book";
-        case AnnotationCategory::ScienceArticle:  return "Science Article";
-        case AnnotationCategory::WebsiteArticle : return "Website Article";
+        case AnnotationCategory::Monograph :  return "Monograph";
+        case AnnotationCategory::Collective : return "Collective work";
+        case AnnotationCategory::OnlineArticle : return "Online article";
         case AnnotationCategory::OnlineVideo : return "Online video";
+        case AnnotationCategory::LegalAct : return "Legal act";
         default: return "None";
     }
 }

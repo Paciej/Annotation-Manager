@@ -37,6 +37,22 @@ AnnotationManager::AnnotationManager(int numOfArguments, char *arguments[]) {
     parseRawInformation(numOfArguments, arguments);    
 }
 
+AnnotationData AnnotationManager::getAnnotationVariablesStruct()
+{
+    AnnotationData newData;
+    newData.annCat = this->annCat;
+    newData.annStyle = this->annStyle;
+    newData.author = this->author;
+    newData.pages = this->pages;
+    newData.place = "";
+    newData.publisher = "";
+    newData.source = "";
+    newData.title = this->title;
+    newData.url = "";
+    newData.year = stoi(this->year);
+    return newData;
+}
+
 void AnnotationManager::getParametersFromUser()
 {
     bool paramGood = false;
