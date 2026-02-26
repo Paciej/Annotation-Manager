@@ -17,6 +17,7 @@ const char* categoryToString(AnnotationCategory category) {
         case AnnotationCategory::OnlineArticle : return "Online article";
         case AnnotationCategory::OnlineVideo : return "Online video";
         case AnnotationCategory::LegalAct : return "Legal act";
+        case AnnotationCategory::MagazineArticle : return "Magazine article";
         default: return "None";
     }
 }

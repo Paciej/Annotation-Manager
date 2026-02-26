@@ -2,7 +2,7 @@
 #include <iostream>
 
 template <typename T>
-void AnnotationManager::setSingleParamFromUser(T& param, const char* name, bool askIfGood) {
+void AnnotationManager::getSingleParamFromUser(T& param, const char* name, bool askIfGood) {
     bool newParamSet = false;
 
     while (!newParamSet) {
@@ -81,10 +81,10 @@ void AnnotationManager::getParametersFromUser()
 
     paramGood = false;
     while (!paramGood) {
-        std::cout << "podaj kategorie adnotacji (cl dla wyswietlenia listy): ";
+        std::cout << "podaj kategorie adnotacji (ls dla wyswietlenia listy): ";
         std::getline(std::cin, newParam);
 
-        if (newParam == "cl") {
+        if (newParam == "ls") {
             // WYSWIETL LISTE DOSTEPNYCH KATEGORII
             std::cout << std::endl << "Lista kategorii" << std::endl;
             for (auto category : catMap) {
@@ -106,13 +106,21 @@ void AnnotationManager::getParametersFromUser()
             }
         }
     }
-    setSingleParamFromUser(this->annData.author, "Autor", 0);
-    setSingleParamFromUser(this->annData.title, "tytul", 0);
-    setSingleParamFromUser(this->annData.year, "rok", 0);
-    setSingleParamFromUser(this->annData.pages, "strony", 0);
-    setSingleParamFromUser(this->annData.place, "Miejsce", 0);    
-    setSingleParamFromUser(this->annData.publisher, "Wydawca", 0);    
-    setSingleParamFromUser(this->annData.url, "Url", 0);    
+
+    switch (this->annData.annStyle) {
+        case AnnotationStyle::BAS : getBASParameters(); break;
+        case AnnotationStyle::APA : std::cout << "Nie obsługujemy jeszcze stylu APA" << std::endl; break;
+        case AnnotationStyle::Harvard : std::cout << "Nie obsługujemy jeszcze stylu Harvard" << std::endl; break;
+        default : std::cout << "Coś poszło nie tak" << std::endl; break;
+    }
+
+   // getSingleParamFromUser(this->annData.author, "Autor", 0);
+   // getSingleParamFromUser(this->annData.title, "tytul", 0);
+   // getSingleParamFromUser(this->annData.date, "rok", 0);
+   // getSingleParamFromUser(this->annData.pages, "strony", 0);
+   // getSingleParamFromUser(this->annData.place, "Miejsce", 0);    
+   // getSingleParamFromUser(this->annData.publisher, "Wydawca", 0);    
+   // getSingleParamFromUser(this->annData.url, "Url", 0);    
 }
 
 void AnnotationManager::listParameters()
@@ -121,11 +129,52 @@ void AnnotationManager::listParameters()
     std::cout << "Styl: " << styleToString(this->annData.annStyle) << std::endl;
     std::cout << "Kategoria: " << categoryToString(this->annData.annCat) << std::endl;
     std::cout << "Autor: " << this->annData.author << std::endl;
-    std::cout << "Dzielo: " << this->annData.title << std::endl;
+    std::cout << "Tytul: " << this->annData.title << std::endl;
+    std::cout << "Oryginalny tytul: " << this->annData.originalTitle << std::endl;
     std::cout << "Rok: " << this->annData.year << std::endl;
+    std::cout << "Data: " << this->annData.date << std::endl;
+    std::cout << "Wydawca: " << this->annData.publisher << std::endl;
+    std::cout << "Miejsce: " << this->annData.place << std::endl;
     std::cout << "Strony: " << this->annData.pages << std::endl;
+    std::cout << "Zrodlo: " << this->annData.source << std::endl;
+    std::cout << "url: " << this->annData.url << std::endl;
 }
 
 void AnnotationManager::parseRawInformation(int argCount, char *args[]) {
     
+}
+
+void AnnotationManager::getBASParameters()
+{
+    std::string desc;
+    getSingleParamFromUser(annData.author, "Autor (imie i nazwisko)", 0);
+    desc = (annData.annCat == AnnotationCategory::OnlineVideo) ? "Polski tytul" : "Tytul"; 
+    getSingleParamFromUser(annData.title, desc.c_str(), 0);
+    if (annData.annCat == AnnotationCategory::OnlineVideo) {
+        getSingleParamFromUser(annData.originalTitle, "Oryginalny tytul", 0);
+    }
+
+    getSingleParamFromUser(annData.year, "Rok wydania", 0);
+    if (annData.annCat == AnnotationCategory::Book || annData.annCat == AnnotationCategory::Monograph) {
+        getSingleParamFromUser(annData.publisher, "wydawca", 0);
+    }
+
+    if (annData.annCat == AnnotationCategory::Book || annData.annCat == AnnotationCategory::Collective) {
+        getSingleParamFromUser(annData.place, "miejsce wydania", 0);
+    }
+
+    if (annData.annCat != AnnotationCategory::OnlineVideo) {
+        getSingleParamFromUser(annData.pages, "strony", 0);
+    }
+
+    if (annData.annCat == AnnotationCategory::OnlineArticle || annData.annCat == AnnotationCategory::OnlineVideo) {
+        getSingleParamFromUser(annData.source, "platforma", 0);
+        getSingleParamFromUser(annData.date, "Data dostepu (dd.MM.yyyy)", 0);
+        desc = (annData.annCat == AnnotationCategory::OnlineArticle) ? "url do artykulu" : "url do imdb"; 
+        getSingleParamFromUser(annData.url, desc.c_str(), 0); 
+    }
+
+    if (annData.annCat == AnnotationCategory::LegalAct) {
+        getSingleParamFromUser(annData.date, "data ustawy", 0);
+    }
 }

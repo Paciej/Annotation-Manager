@@ -7,8 +7,9 @@ private:
     AnnotationData annData;
 
     template <typename T>
-    void setSingleParamFromUser(T& param, const char* name, bool askIfGood);
+    void getSingleParamFromUser(T& param, const char* name, bool askIfGood);
     void parseRawInformation(int argCount, char *args[]);
+    void getBASParameters();
 public:
     AnnotationManager();
     AnnotationManager(int numOfArguments, char *arguments[]); 

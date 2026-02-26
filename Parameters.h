@@ -24,9 +24,11 @@ enum class AnnotationCategory {
 struct AnnotationData {
     AnnotationStyle annStyle = AnnotationStyle::None;
     AnnotationCategory annCat = AnnotationCategory::None;
-    std::string year = "0";
+    std::string year = "2025";
+    std::string date = "01.01.2000";
     std::string author = "_author_";
     std::string title = "_title_";
+    std::string originalTitle = "_original title_";
     std::string place = "_place_";
     std::string publisher = "_publisher_";
     std::string url = "_url_";
@@ -38,7 +40,6 @@ const char* styleToString(AnnotationStyle style);
 const char* categoryToString(AnnotationCategory category);
 
 static std::unordered_map<const char*, AnnotationCategory> const catMap = { 
-    {"None", AnnotationCategory::None}, 
     {"Book", AnnotationCategory::Book}, 
     {"Collective Work", AnnotationCategory::Collective},
     {"Monograph", AnnotationCategory::Monograph},                                                                           
@@ -49,7 +50,6 @@ static std::unordered_map<const char*, AnnotationCategory> const catMap = {
 };
 
 static std::unordered_map<const char*, AnnotationStyle> const styleMap = {  
-    {"None", AnnotationStyle::None},
     {"Harvard", AnnotationStyle::Harvard},
     {"APA", AnnotationStyle::APA},
     {"BAS", AnnotationStyle::BAS}
