@@ -2,6 +2,7 @@
 #define PARAMETERS_H
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 enum class AnnotationStyle {
     None,
@@ -26,7 +27,7 @@ struct AnnotationData {
     AnnotationCategory annCat = AnnotationCategory::None;
     std::string year = "2025";
     std::string date = "01.01.2000";
-    std::string author = "_author_";
+    std::vector<std::string> authors = {};
     std::string title = "_title_";
     std::string originalTitle = "_original title_";
     std::string place = "_place_";

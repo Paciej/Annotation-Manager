@@ -128,7 +128,9 @@ void AnnotationManager::listParameters()
     std::cout << std::endl << "Wprowadzone dane: " << std::endl;
     std::cout << "Styl: " << styleToString(this->annData.annStyle) << std::endl;
     std::cout << "Kategoria: " << categoryToString(this->annData.annCat) << std::endl;
-    std::cout << "Autor: " << this->annData.author << std::endl;
+    for (auto author : annData.authors) {
+       std::cout << "Autor: " << author << std::endl; 
+    }
     std::cout << "Tytul: " << this->annData.title << std::endl;
     std::cout << "Oryginalny tytul: " << this->annData.originalTitle << std::endl;
     std::cout << "Rok: " << this->annData.year << std::endl;
@@ -147,7 +149,20 @@ void AnnotationManager::parseRawInformation(int argCount, char *args[]) {
 void AnnotationManager::getBASParameters()
 {
     std::string desc;
-    getSingleParamFromUser(annData.author, "Autor (imie i nazwisko)", 0);
+    if (annData.annCat != AnnotationCategory::Collective) {
+        getSingleParamFromUser(annData.authors[0], "Autor (imie i nazwisko)", 0);
+    } else {
+        int numOfAuthors = 0;
+        std::cout << "Podaj liczbe autorow: ";
+        std::cin >> numOfAuthors;
+        annData.authors.resize(numOfAuthors);
+        std::cin.get();
+        for (int i = 0; i < numOfAuthors; i++) {
+            std::string name = "autor " + (i + 1);
+            getSingleParamFromUser(annData.authors[i], name.c_str(), 0);
+        } 
+    }
+
     desc = (annData.annCat == AnnotationCategory::OnlineVideo) ? "Polski tytul" : "Tytul"; 
     getSingleParamFromUser(annData.title, desc.c_str(), 0);
     if (annData.annCat == AnnotationCategory::OnlineVideo) {

@@ -7,22 +7,25 @@ const char *BasGenerator::generateAnnotation(const AnnotationData& annData)
     switch(annData.annCat) {
         case AnnotationCategory::Book : 
         case AnnotationCategory::Monograph :
-        annotation = annData.author + ", " + annData.title + ", " + annData.publisher + ", " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";
+        annotation = annData.authors[0] + ", " + annData.title + ", " + annData.publisher + ", " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";
         break;
         case AnnotationCategory::Collective :
-        annotation = annData.author + ", TYTUL ROZDZIALU, [w:" + annData.title + "], red. IMIE REDAKTORA, " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";  
+        for (auto author : annData.authors) {
+            annotation += author + ", ";
+        }
+        annotation += "TYTUL ROZDZIALU, [w:" + annData.title + "], red. IMIE REDAKTORA, " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";  
         break;
         case AnnotationCategory::LegalAct :
         annotation = "Ustawa z dnia " + (annData.year) + " r. - " + annData.title + ", Dz.U. poz. " + annData.pages + "."; 
         break;
         case AnnotationCategory::MagazineArticle :
-        annotation = annData.author + ", " + annData.title + ", ,," + annData.publisher + "\" " + (annData.year) + ", s. " + annData.pages + ".";
+        annotation = annData.authors[0] + ", " + annData.title + ", ,," + annData.publisher + "\" " + (annData.year) + ", s. " + annData.pages + ".";
         break;  
         case AnnotationCategory::OnlineArticle :
-        annotation = annData.author + ", " + annData.title + ", " + annData.url + "[dostęp: " + (annData.year) + "]";
+        annotation = annData.authors[0] + ", " + annData.title + ", " + annData.url + "[dostęp: " + (annData.year) + "]";
         break;
         case AnnotationCategory::OnlineVideo :
-        annotation = annData.author + ", " + annData.title + ", [online: " + annData.publisher + " " + (annData.year) + "]";
+        annotation = annData.authors[0] + ", " + annData.title + ", [online: " + annData.publisher + " " + (annData.year) + "]";
         break; 
     }
     
