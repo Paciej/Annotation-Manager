@@ -1,7 +1,7 @@
 #include <iostream>
 #include "AnnotationManager.h"
-#include "AnnotationGenerator.h"
-#include "BasGenerator.h"
+#include <annotation/AnnotationGenerator.h>
+#include <annotation/BasGenerator.h>
 
 int main(int argc, char *argv[]) {
 

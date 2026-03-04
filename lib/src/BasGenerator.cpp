@@ -1,4 +1,4 @@
-#include "BasGenerator.h"
+#include <annotation/BasGenerator.h>
 #include <iostream>
 
 const char *BasGenerator::generateAnnotation(const AnnotationData& annData)

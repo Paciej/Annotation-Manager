@@ -1,6 +1,6 @@
 #ifndef ANNOTATION_MANAGER_H
 #define ANNOTATION_MANAGER_H
-#include "Parameters.h"
+#include <annotation/Parameters.h>
 
 class AnnotationManager {
 private:
