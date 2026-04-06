@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
     qDebug() << "Starting app...";  // debug output
     
     QApplication app(argc, argv);
-    
     QWidget window;
     window.setWindowTitle("Test GUI");
     window.resize(400, 300);

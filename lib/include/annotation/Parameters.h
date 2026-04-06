@@ -41,7 +41,7 @@ const char* styleToString(AnnotationStyle style);
 const char* categoryToString(AnnotationCategory category);
 
 static std::unordered_map<const char*, AnnotationCategory> const catMap = { 
-    {"Book", AnnotationCategory::Book}, 
+    {"Book", AnnotationCategory::Book},
     {"Collective Work", AnnotationCategory::Collective},
     {"Monograph", AnnotationCategory::Monograph},                                                                           
     {"Legal act", AnnotationCategory::LegalAct},
