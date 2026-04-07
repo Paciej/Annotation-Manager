@@ -8,10 +8,9 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 
-    // QWidget window;
     AnnotationWindow window;
 
-    window.setWindowTitle("Test GUI");
+    window.setWindowTitle("Annotation Generator");
     window.resize(400, 300);
     window.show();  
     
