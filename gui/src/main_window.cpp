@@ -3,7 +3,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QDebug>
-#include "annotation/Parameters.h"
+#include <QPixmap>
+#include "annotation/BasGenerator.h"
 #include "main_window.h"
 
 AnnotationWindow::AnnotationWindow(QWidget *parent) : QMainWindow(parent) {
@@ -19,18 +20,20 @@ AnnotationWindow::AnnotationWindow(QWidget *parent) : QMainWindow(parent) {
     } 
 
     mainLayout->addWidget(typeSelector);
-    mainLayout->setSpacing(3);
+    mainLayout->setSpacing(2);
 
     this->stackedWidget = new QStackedWidget(centralWidget);
     mainLayout->addWidget(stackedWidget);
 
     createTypeWidgets();
 
-    mainLayout->setSpacing(2);
-    QPushButton *applyBtn = new QPushButton("Apply", centralWidget);
+    mainLayout->setSpacing(1);
+    QPushButton *applyBtn = new QPushButton("Generate", centralWidget);
     mainLayout->addWidget(applyBtn);
+    mainLayout->setSpacing(2);
 
     this->resultText = new QLabel("tutaj bedzie odpowiedz", centralWidget);
+    resultText->setTextFormat(Qt::RichText);
     mainLayout->addWidget(resultText);
 
     connect(typeSelector, QOverload<int>::of(&QComboBox::currentIndexChanged), stackedWidget, &QStackedWidget::setCurrentIndex);
@@ -38,13 +41,40 @@ AnnotationWindow::AnnotationWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void AnnotationWindow::generateAnnotation() {
-   
-    AnnotationData data;
+    
+    QMap<QString, QString> rawData = extractDataForm();
 
+    AnnotationData data = getAnnotationData(rawData);
+
+    const char* generated = BasGenerator().generateAnnotation(data);
+
+    this->resultText->setText(QString::fromUtf8(generated));
+}
+
+QMap<QString, QString> AnnotationWindow::extractDataForm(){
+
+    QMap<QString, QString> collectedData;
+
+    QWidget *currentPage = stackedWidget->currentWidget();
+
+    QList<QLineEdit*> allLineEdits = currentPage->findChildren<QLineEdit*>();
+
+    for (QLineEdit *lineEdit : allLineEdits) {
+        QString fieldName = lineEdit->objectName();
+        QString fieldValue = lineEdit->text();
+        
+        collectedData.insert(fieldName, fieldValue);
+    }
+
+    return collectedData;
+}
+
+AnnotationData AnnotationWindow::getAnnotationData(const QMap<QString, QString> &formData) {
+
+    AnnotationData data;
     data.annStyle == AnnotationStyle::BAS;
 
     QString comboText = typeSelector->currentText();
-
     auto result = std::find_if(
                 catMap.begin(),
                 catMap.end(),
@@ -53,27 +83,24 @@ void AnnotationWindow::generateAnnotation() {
 
     if (result != catMap.end()) {
         data.annCat = result->second;
+        qDebug() << "Kategoria: " << result->first;
+    } else {
+        qDebug() << "Nie znaleziono kategorii!";
     }
 
-    QWidget *currentWidget = stackedWidget->currentWidget();
-    QFormLayout *form = qobject_cast<QFormLayout*>(stackedWidget->currentWidget()->layout());
+    if (formData.contains("year"))          data.year = formData.value("year").toStdString();
+    if (formData.contains("date"))          data.date = formData.value("date").toStdString();
+    if (formData.contains("title"))         data.title = formData.value("title").toStdString();
+    if (formData.contains("originalTitle")) data.originalTitle = formData.value("originalTitle").toStdString();
+    if (formData.contains("place"))         data.place = formData.value("place").toStdString();
+    if (formData.contains("publisher"))     data.publisher = formData.value("publisher").toStdString();
+    if (formData.contains("url"))           data.url = formData.value("url").toStdString();
+    if (formData.contains("source"))        data.source = formData.value("source").toStdString();
+    if (formData.contains("pages"))         data.pages = formData.value("pages").toStdString();
+    if (formData.contains("author"))        data.authors[0] = formData.value("author").toStdString();
 
-    for (int row = 0; row < form->rowCount(); row++) {
-        QLayoutItem *labelItem = form->itemAt(row, QFormLayout::LabelRole);
-        QLayoutItem *fieldItem = form->itemAt(row, QFormLayout::FieldRole);
-
-        if (labelItem && fieldItem) {
-            QLabel *label = qobject_cast<QLabel*>(labelItem->widget());
-            QLineEdit *lineEdit = qobject_cast<QLineEdit*>(fieldItem->widget());
-
-            if (label && lineEdit) {
-                QString fieldName = label->text(); 
-                QString fieldValue = lineEdit->text(); 
-                
-                qDebug() << "Pole" << fieldName << "ma wartość:" << fieldValue; 
-            }  
-        }
-    }
+    // Add later parsing from multiple authors
+    return data;
 }
 
 void AnnotationWindow::createTypeWidgets() {
@@ -83,11 +110,22 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *bookLayout = new QFormLayout(bookPage);
 
     QLineEdit *bookAuthor = new QLineEdit();
+    bookAuthor->setObjectName("author");
+
     QLineEdit *bookTitle = new QLineEdit();
+    bookTitle->setObjectName("title");
+
     QLineEdit *bookYear = new QLineEdit();
+    bookYear->setObjectName("year");
+
     QLineEdit *bookPublisher = new QLineEdit();
+    bookPublisher->setObjectName("publisher");
+
     QLineEdit *bookPlace = new QLineEdit();
+    bookPlace->setObjectName("place");
+
     QLineEdit *bookPages = new QLineEdit();
+    bookPages->setObjectName("pages");
 
     bookLayout->addRow("Author:", bookAuthor);
     bookLayout->addRow("Title:", bookTitle);
@@ -103,15 +141,22 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *collectiveLayout = new QFormLayout(collectivePage); 
 
     QLineEdit *collectiveAuthor = new QLineEdit();
+    collectiveAuthor->setObjectName("authors");
+    
     QLineEdit *collectiveTitle = new QLineEdit();
-    // QLineEdit *collectiveYear = new QLineEdit();
+    collectiveTitle->setObjectName("title");
+    
     QLineEdit *collectivePublisher = new QLineEdit();
+    collectivePublisher->setObjectName("publisher");
+    
     QLineEdit *collectivePlace = new QLineEdit();
+    collectivePlace->setObjectName("place");
+    
     QLineEdit *collectivePages = new QLineEdit();
+    collectivePages->setObjectName("pages");
 
     collectiveLayout->addRow("Author:", collectiveAuthor);
     collectiveLayout->addRow("Title:", collectiveTitle);
-    // collectiveLayout->addRow("Year:", collectiveYear);
     collectiveLayout->addRow("Publisher:", collectivePublisher);
     collectiveLayout->addRow("Place:", collectivePlace);
     collectiveLayout->addRow("Pages:", collectivePages);
@@ -123,10 +168,19 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *monoLayout = new QFormLayout(monoPage);
 
     QLineEdit *monoAuthor = new QLineEdit();
+    monoAuthor->setObjectName("author");
+    
     QLineEdit *monoTitle = new QLineEdit();
+    monoTitle->setObjectName("title");
+    
     QLineEdit *monoYear = new QLineEdit();
+    monoYear->setObjectName("year");
+    
     QLineEdit *monoPublisher = new QLineEdit();
+    monoPublisher->setObjectName("publisher");
+    
     QLineEdit *monoPages = new QLineEdit();
+    monoPages->setObjectName("pages");
 
     monoLayout->addRow("Author:", monoAuthor);
     monoLayout->addRow("Title:", monoTitle);
@@ -145,9 +199,16 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *magazineLayout = new QFormLayout(magazinePage);
 
     QLineEdit *magazineAuthor = new QLineEdit();
+    magazineAuthor->setObjectName("author");
+    
     QLineEdit *magazineTitle = new QLineEdit();
+    magazineTitle->setObjectName("title");
+    
     QLineEdit *magazineYear = new QLineEdit();
+    magazineYear->setObjectName("year");
+    
     QLineEdit *magazinePages = new QLineEdit();
+    magazinePages->setObjectName("pages");
 
     magazineLayout->addRow("Author:", magazineAuthor);
     magazineLayout->addRow("Title:", magazineTitle);
@@ -161,12 +222,25 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *onlineArtLayout = new QFormLayout(onlineArtPage);
 
     QLineEdit *onlineArtAuthor = new QLineEdit();
+    onlineArtAuthor->setObjectName("author");
+    
     QLineEdit *onlineArtTitle = new QLineEdit();
+    onlineArtTitle->setObjectName("title");
+    
     QLineEdit *onlineArtYear = new QLineEdit();
+    onlineArtYear->setObjectName("year");
+    
     QLineEdit *onlineArtPages = new QLineEdit();
+    onlineArtPages->setObjectName("pages");
+    
     QLineEdit *onlineArtSource = new QLineEdit();
+    onlineArtSource->setObjectName("source");
+    
     QLineEdit *onlineArtDate = new QLineEdit();
+    onlineArtDate->setObjectName("date");
+    
     QLineEdit *onlineArtUrl = new QLineEdit();
+    onlineArtUrl->setObjectName("url");
     
     onlineArtLayout->addRow("Author:", onlineArtAuthor);
     onlineArtLayout->addRow("Title:", onlineArtTitle);
@@ -183,12 +257,25 @@ void AnnotationWindow::createTypeWidgets() {
     QFormLayout *videoLayout = new QFormLayout(videoPage);
 
     QLineEdit *videoAuthor = new QLineEdit();
+    videoAuthor->setObjectName("author");
+    
     QLineEdit *videoTitle = new QLineEdit();
+    videoTitle->setObjectName("title");
+    
     QLineEdit *videoOriginalTitle = new QLineEdit();
+    videoOriginalTitle->setObjectName("originalTitle");
+    
     QLineEdit *videoYear = new QLineEdit();
+    videoYear->setObjectName("year");
+    
     QLineEdit *videoSource = new QLineEdit();
+    videoSource->setObjectName("source");
+    
     QLineEdit *videoDate = new QLineEdit();
+    videoDate->setObjectName("date");
+    
     QLineEdit *videoUrl = new QLineEdit();
+    videoUrl->setObjectName("url");
     
     videoLayout->addRow("Author:", videoAuthor);
     videoLayout->addRow("Title:", videoTitle);

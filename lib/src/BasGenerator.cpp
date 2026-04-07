@@ -6,27 +6,28 @@ const char *BasGenerator::generateAnnotation(const AnnotationData& annData)
     std::string annotation = "";
     switch(annData.annCat) {
         case AnnotationCategory::Book : 
-            annotation = annData.authors[0] + ", " + annData.title + ", " + annData.publisher + ", " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";
+            annotation = annData.authors[0] + ", <i>" + annData.title + "</i>, " + annData.publisher + ", " + annData.place + " " + (annData.year) + ", s. " + annData.pages + ".";
+            break;
         case AnnotationCategory::Monograph :
-            annotation = annData.authors[0] + ", " + annData.title + ", " + annData.publisher + ", " + (annData.year) + ", s. " + annData.pages + ".";
+            annotation = annData.authors[0] + ", <i>" + annData.title + "</i>, " + annData.publisher + ", " + (annData.year) + ", s. " + annData.pages + ".";
             break;
         case AnnotationCategory::Collective :
             for (auto author : annData.authors) {
                 annotation += author + ", ";
             }
-            annotation += annData.title + ", " + annData.place + " " + annData.year + ", s. " + annData.pages + ".";   
+            annotation += "<i>" + annData.title + "</i>, " + annData.place + " " + annData.year + ", s. " + annData.pages + ".";   
             break;
         case AnnotationCategory::LegalAct :
             annotation = "Ustawa z dnia " + annData.date + " r. - " + annData.title + "(Dz.U. z " + annData.year + " r. poz. " + annData.pages + ".)."; 
             break;
         case AnnotationCategory::MagazineArticle :
-            annotation = annData.authors[0] + ", " + annData.title + ", ,," + annData.publisher + "\", " + (annData.year) + ", s. " + annData.pages + ".";
+            annotation = annData.authors[0] + ", <i>" + annData.title + "</i>, ,," + annData.publisher + "\", " + (annData.year) + ", s. " + annData.pages + ".";
             break;  
         case AnnotationCategory::OnlineArticle :
-            annotation = "Zob. " + annData.authors[0] + ", " + annData.title + ", [online: " + annData.source + "], " + annData.year + ", " + annData.url + ", [dostęp: " + annData.date + "]";  
+            annotation = "Zob. " + annData.authors[0] + ", <i>" + annData.title + "</i>, [online: " + annData.source + "], " + annData.year + ", " + annData.url + ", [dostęp: " + annData.date + "]";  
             break;
         case AnnotationCategory::OnlineVideo :
-            annotation = "Zob. " + annData.authors[0] + " (reż.), " + annData.title + " (" + annData.originalTitle + "), [online: " + annData.source + "], " + annData.year + ", " + annData.url + ", [dostęp: " + annData.date + "]";  
+            annotation = "Zob. " + annData.authors[0] + " (reż.), <i>" + annData.title + "</i> (<i>" + annData.originalTitle + "</i>), [online: " + annData.source + "], " + annData.year + ", " + annData.url + ", [dostęp: " + annData.date + "]";  
             break; 
     }
     
