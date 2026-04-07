@@ -1,6 +1,7 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 #include <string>
+#include <map>
 #include <unordered_map>
 #include <vector>
 
@@ -27,7 +28,6 @@ struct AnnotationData {
     AnnotationCategory annCat = AnnotationCategory::None;
     std::string year = "2025";
     std::string date = "01.01.2000";
-    std::vector<std::string> authors = {""};
     std::string title = "_title_";
     std::string originalTitle = "_original title_";
     std::string place = "_place_";
@@ -35,12 +35,13 @@ struct AnnotationData {
     std::string url = "_url_";
     std::string source = "_source_";
     std::string pages = "_pages_"; 
+    std::vector<std::string> authors = {""};
 };
 
 const char* styleToString(AnnotationStyle style);
 const char* categoryToString(AnnotationCategory category);
 
-static std::unordered_map<const char*, AnnotationCategory> const catMap = { 
+static std::map<const char*, AnnotationCategory> const catMap = { 
     {"Book", AnnotationCategory::Book},
     {"Collective Work", AnnotationCategory::Collective},
     {"Monograph", AnnotationCategory::Monograph},                                                                           
